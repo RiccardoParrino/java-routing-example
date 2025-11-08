@@ -22,7 +22,7 @@ public class Espresso implements HttpHandler {
     private HttpServer httpServer;
     private ExecutorService executorService;
 
-    private Map<String, Middleware> routes;
+    private Map<String, Consumer> routes;
 
     public Espresso(int port) throws IOException {
         this.port = port;
@@ -34,9 +34,34 @@ public class Espresso implements HttpHandler {
         this.routes = new HashMap<>();
     }
 
-    public Map<String, Middleware> add(String route, Middleware middleware) throws URISyntaxException {
+    // for middleware function
+    public void use(String route, Consumer middleware) {
         this.routes.put(route, middleware);
-        return this.routes;
+    }
+
+    // for get endpoint
+    public void get(String route, Consumer consumer) {
+        this.routes.put(route, consumer);
+    }
+
+    // for post endpoint
+    public void post(String route, Consumer consumer) {
+        this.routes.put(route, consumer);
+    }
+
+    // for put endpoint
+    public void put(String route, Consumer consumer) {
+        this.routes.put(route, consumer);
+    }
+
+    // for delete endpoint
+    public void delete(String route, Consumer consumer) {
+        this.routes.put(route, consumer);
+    }
+
+    // for update endpoint
+    public void update(String route, Consumer consumer) {
+        this.routes.put(route, consumer);
     }
 
     public void start() {
@@ -50,7 +75,7 @@ public class Espresso implements HttpHandler {
         HttpResponse httpResponse = new HttpResponse(exchange.getResponseBody());
         HttpRequest httpRequest = new HttpRequest(exchange.getRequestBody());
 
-        Middleware middleware = this.routes.get(url);
+        Consumer middleware = this.routes.get(url);
 
         middleware.accept(httpResponse, httpRequest, middleware);
 

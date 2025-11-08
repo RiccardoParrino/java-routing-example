@@ -3,8 +3,8 @@ package org.espresso.framework;
 import org.espresso.framework.model.HttpRequest;
 import org.espresso.framework.model.HttpResponse;
 
-public interface Middleware {
+public interface Consumer {
 
-    void accept(HttpResponse httpResponse, HttpRequest httpRequest, Middleware next);
+    void accept(HttpResponse httpResponse, HttpRequest httpRequest, Consumer next);
 
 }

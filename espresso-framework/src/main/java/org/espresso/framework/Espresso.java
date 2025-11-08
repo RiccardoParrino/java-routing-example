@@ -14,7 +14,6 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.net.InetSocketAddress;
-import java.net.URISyntaxException;
 
 public class Espresso implements HttpHandler {
 
@@ -36,35 +35,42 @@ public class Espresso implements HttpHandler {
 
     // for middleware function
     public void use(String route, Consumer middleware) {
+        this.httpServer.createContext(route, this);
         this.routes.put(route, middleware);
     }
 
     // for get endpoint
     public void get(String route, Consumer consumer) {
+        this.httpServer.createContext(route, this);
         this.routes.put(route, consumer);
     }
 
     // for post endpoint
     public void post(String route, Consumer consumer) {
+        this.httpServer.createContext(route, this);
         this.routes.put(route, consumer);
     }
 
     // for put endpoint
     public void put(String route, Consumer consumer) {
+        this.httpServer.createContext(route, this);
         this.routes.put(route, consumer);
     }
 
     // for delete endpoint
     public void delete(String route, Consumer consumer) {
+        this.httpServer.createContext(route, this);
         this.routes.put(route, consumer);
     }
 
     // for update endpoint
     public void update(String route, Consumer consumer) {
+        this.httpServer.createContext(route, this);
         this.routes.put(route, consumer);
     }
 
     public void start() {
+        System.out.println("Server start at address: http://localhost:" + this.port);
         this.httpServer.start();
     }
 

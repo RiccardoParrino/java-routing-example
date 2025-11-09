@@ -3,7 +3,7 @@ package org.espresso.framework.model;
 public class HttpResponse {
     private String status;
     private String header;
-    private String body;
+    private Object body;
 
     public void setStatus(String status) {
         this.status = status;
@@ -13,7 +13,7 @@ public class HttpResponse {
         this.header = header;
     }
 
-    public void setBody(String body) {
+    public void setBody(Object body) {
         this.body = body;
     }
 
@@ -25,7 +25,7 @@ public class HttpResponse {
         return this.header;
     }
 
-    public String getBody() {
+    public Object getBody() {
         return this.body;
     }
 }

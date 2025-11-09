@@ -1,6 +1,7 @@
 package org.espresso.framework;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.concurrent.Executors;
 
 import org.espresso.framework.model.HttpRequest;
 import org.espresso.framework.model.HttpResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -43,6 +45,30 @@ public class Espresso {
         this.httpServer.createContext(url, dispatcher);
     }
 
+    // for patch endpoint
+    public void patch(String url, Process process) {
+        this.dispatcher.addRoute(url, process);
+        this.httpServer.createContext(url, dispatcher);
+    }
+
+    // for put endpoint
+    public void put(String url, Process process) {
+        this.dispatcher.addRoute(url, process);
+        this.httpServer.createContext(url, dispatcher);
+    }
+
+    // for update endpoint
+    public void update(String url, Process process) {
+        this.dispatcher.addRoute(url, process);
+        this.httpServer.createContext(url, dispatcher);
+    }
+
+    // for delete endpoint
+    public void delete(String url, Process process) {
+        this.dispatcher.addRoute(url, process);
+        this.httpServer.createContext(url, dispatcher);
+    }
+
     public void listen() {
         System.out.println("Server start at address: http://localhost:" + this.port);
         this.httpServer.start();
@@ -63,9 +89,23 @@ public class Espresso {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            preProcessRequest(exchange);
             HttpRequest httpRequest = HttpRequest.buildFrom(exchange);
             HttpResponse httpResponse = this.serve(httpRequest);
-            System.out.println(httpResponse.getBody());
+            sendResponse(exchange, httpResponse);
+        }
+
+        private void preProcessRequest(HttpExchange httpExchange) {
+
+        }
+
+        private void sendResponse(HttpExchange httpExchange, HttpResponse httpResponse) throws IOException {
+            ObjectMapper mapper = new ObjectMapper();
+            String response = mapper.writeValueAsString(httpResponse.getBody());
+            httpExchange.sendResponseHeaders(200, response.getBytes().length);
+            try (OutputStream os = httpExchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
         }
 
     }

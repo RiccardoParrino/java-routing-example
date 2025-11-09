@@ -1,11 +1,31 @@
 package org.espresso.framework.model;
 
-import java.io.OutputStream;
-
 public class HttpResponse {
+    private String status;
+    private String header;
+    private String body;
 
-    public HttpResponse(OutputStream responseBody) {
-        // TODO Auto-generated constructor stub
+    public void setStatus(String status) {
+        this.status = status;
     }
 
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public String getHeader() {
+        return this.header;
+    }
+
+    public String getBody() {
+        return this.body;
+    }
 }

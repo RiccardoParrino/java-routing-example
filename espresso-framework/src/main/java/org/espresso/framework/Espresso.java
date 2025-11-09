@@ -35,37 +35,37 @@ public class Espresso {
 
     // for get endpoint
     public void get(String url, Process process) {
-        this.dispatcher.addRoute(url, process);
+        this.dispatcher.addGetRoute(url, process);
         this.httpServer.createContext(url, this.dispatcher);
     }
 
     // for post endpoint
     public void post(String url, Process process) {
-        this.dispatcher.addRoute(url, process);
+        this.dispatcher.addPostRoute(url, process);
         this.httpServer.createContext(url, dispatcher);
     }
 
     // for patch endpoint
     public void patch(String url, Process process) {
-        this.dispatcher.addRoute(url, process);
+        this.dispatcher.addPatchRoute(url, process);
         this.httpServer.createContext(url, dispatcher);
     }
 
     // for put endpoint
     public void put(String url, Process process) {
-        this.dispatcher.addRoute(url, process);
+        this.dispatcher.addPutRoute(url, process);
         this.httpServer.createContext(url, dispatcher);
     }
 
     // for update endpoint
     public void update(String url, Process process) {
-        this.dispatcher.addRoute(url, process);
+        this.dispatcher.addUpdateRoute(url, process);
         this.httpServer.createContext(url, dispatcher);
     }
 
     // for delete endpoint
     public void delete(String url, Process process) {
-        this.dispatcher.addRoute(url, process);
+        this.dispatcher.addDeleteRoute(url, process);
         this.httpServer.createContext(url, dispatcher);
     }
 
@@ -76,15 +76,58 @@ public class Espresso {
 
     class Dispatcher implements HttpHandler {
 
-        private Map<String, Process> routes = new HashMap<>();
+        private Map<String, Process> getRoutes = new HashMap<>();
+        private Map<String, Process> postRoutes = new HashMap<>();
+        private Map<String, Process> putRoutes = new HashMap<>();
+        private Map<String, Process> patchRoutes = new HashMap<>();
+        private Map<String, Process> deleteRoutes = new HashMap<>();
+        private Map<String, Process> updateRoutes = new HashMap<>();
 
-        public void addRoute(String url, Process process) {
-            this.routes.put(url, process);
+        public void addGetRoute(String url, Process process) {
+            this.getRoutes.put(url, process);
+        }
+
+        public void addPostRoute(String url, Process process) {
+            this.postRoutes.put(url, process);
+        }
+
+        public void addPutRoute(String url, Process process) {
+            this.putRoutes.put(url, process);
+        }
+
+        public void addPatchRoute(String url, Process process) {
+            this.patchRoutes.put(url, process);
+        }
+
+        public void addDeleteRoute(String url, Process process) {
+            this.deleteRoutes.put(url, process);
+        }
+
+        public void addUpdateRoute(String url, Process process) {
+            this.updateRoutes.put(url, process);
         }
 
         public HttpResponse serve(HttpRequest httpRequest) {
             HttpResponse httpResponse = new HttpResponse();
-            return this.routes.get(httpRequest.getUrl()).start(httpResponse, httpRequest);
+
+            String method = httpRequest.getMethod();
+
+            switch (method) {
+                case "GET":
+                    return this.getRoutes.get(httpRequest.getUrl()).start(httpResponse, httpRequest);
+                case "POST":
+                    return this.postRoutes.get(httpRequest.getUrl()).start(httpResponse, httpRequest);
+                case "PUT":
+                    return this.putRoutes.get(httpRequest.getUrl()).start(httpResponse, httpRequest);
+                case "UPDATE":
+                    return this.updateRoutes.get(httpRequest.getUrl()).start(httpResponse, httpRequest);
+                case "DELETE":
+                    return this.deleteRoutes.get(httpRequest.getUrl()).start(httpResponse, httpRequest);
+                case "PATCH":
+                    return this.patchRoutes.get(httpRequest.getUrl()).start(httpResponse, httpRequest);
+                default:
+                    return new HttpResponse();
+            }
         }
 
         @Override

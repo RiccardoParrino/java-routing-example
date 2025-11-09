@@ -29,7 +29,7 @@ public class HttpRequest {
         this.method = method;
     }
 
-    public String method() {
+    public String getMethod() {
         return this.method;
     }
 
